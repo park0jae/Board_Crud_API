@@ -28,7 +28,7 @@ class BoardTest {
     @Test
     void save(){
         // 1. 게시글 파라미터 생성
-        Board params = createBoard("1번 게시글 제목", "1번 게시글 내용", 0);
+        Board params = createBoard("1번 게시글 제목", "1번 게시글 내용", "영재");
 
         // 2. 게시글 저장
         boardRepository.save(params);
@@ -42,9 +42,9 @@ class BoardTest {
 
     @Test
     void findAll() {
-        Board params = createBoard("1번 게시글 제목", "1번 게시글 내용", 0);
+        Board params = createBoard("1번 게시글 제목", "1번 게시글 내용", "영재");
 
-        Board params2 = createBoard("2번 게시글 제목", "2번 게시글 내용", 0);
+        Board params2 = createBoard("2번 게시글 제목", "2번 게시글 내용", "영재");
 
         boardRepository.save(params);
         boardRepository.save(params2);
@@ -61,7 +61,7 @@ class BoardTest {
 
     @Test
     void delete() {
-        Board board = createBoard("1번 게시글 제목", "1번 게시글 내용", 0);
+        Board board = createBoard("1번 게시글 제목", "1번 게시글 내용", "영재");
 
         boardRepository.save(board);
 
@@ -73,11 +73,11 @@ class BoardTest {
 
         assertThat(boardRepository.count()).isEqualTo(0);
     }
-    private static Board createBoard(String title, String content, int hits) {
+    private static Board createBoard(String title, String content, String writer) {
         Board params = Board.builder()
                 .title(title)
                 .content(content)
-                .hits(hits)
+                .writer(writer)
                 .build();
 
         return params;

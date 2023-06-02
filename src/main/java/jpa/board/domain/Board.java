@@ -4,34 +4,40 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jpa.board.dto.BoardRequestDto;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class Board {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String content;
+    private String writer; // 작성자
     private int hits;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-    private LocalDateTime modifiedDate;
+    private LocalDate createdDate = LocalDate.now();
+    private LocalDate modifiedDate;
 
     @Builder
-    public Board(String title, String content,  int hits){
+    public Board(String title, String content, String writer , int hits){
         this.title = title;
         this.content = content;
+        this.writer = writer;
         this.hits = hits;
     }
+
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+        this.modifiedDate = LocalDate.now();
+    }
+
 
 }

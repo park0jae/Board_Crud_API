@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <!--    <link href="../css/bootstrap.min.css"-->
+    <!--          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+        <h2>글 상세페이지</h2>
+    </div>
+
+    <div>
+        <label for="id">글 ID</label>
+        <input type="text" id="id" name="id" class="form-control" value="1"
+               th:value="${board.id}" readonly>
+    </div>
+    <div>
+        <label for="writer">글 작성자</label>
+        <input type="text" id="writer" name="writer" class="form-control" placeholder="작성자를 입력하세요." th:value="${board.writer}" readonly>
+    </div>
+    <div>
+        <label for="title">글 제목</label>
+        <input type="text" id="title"  name="title" class="form-control" placeholder="제목을 입력하세요." th:value="${board.title}" readonly>
+
+    </div>
+    <div>
+        <label for="content" >글 내용</label>
+        <textarea cols="150" rows="10" id="content" name="content" class="form-control" placeholder="내용을 입력하세요." th:text="${board.content}" readonly></textarea>
+    </div>
+
+    <hr class="my-4">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit" th:onclick="|location.href='@{/board/edit/{boardId}(boardId=${board.id})}'|">수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/board/boards}'|" type="button">이전</button>
+            </div>
+        </div>
+        <br>
+        <form action="boards.html" th:action th:method="delete">
+            <div class="col">
+                <button type="submit" class="w-100 btn btn-danger btn-lg">글 삭제</button>
+            </div>
+        </form>
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>
+
