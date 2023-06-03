@@ -42,7 +42,20 @@ public class BoardController {
 
     // Board List 불러오기
     @GetMapping("/boards")
-    public String boardList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public String boardList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+
+        Page<BoardResponseDto> boardList = boardService.findAll(pageable);
+
+        // 페이지블럭 처리
+        // 1을 더해주는 이유는 pageable은 0부터라 1을 처리하려면 1을 더해서 시작해주어야 함
+        int nowPage = boardList.getPageable().getPageNumber() + 1;
+        // -1 값이 들어가는 것을 막기 위해 max값으로 두 개의 값을 넣고 더 큰 값을 넣어주게 된다.
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 9, boardList.getTotalPages());
+
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("boards", boardService.findAll(pageable));
         return "/board/boards";
     }
