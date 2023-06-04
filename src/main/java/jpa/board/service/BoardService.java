@@ -50,8 +50,7 @@ public class BoardService {
     }
     @Transactional
     public void delete(Long id){
-//        Board board = boardRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-//        boardRepository.delete(board);
-        boardRepository.deleteById(id);
+        Board board = boardRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        boardRepository.deleteById(board.getId());
     }
 }
