@@ -28,14 +28,14 @@ public class BoardController {
     private final BoardService boardService;
 
     // Board add Form 불러오기
-    @GetMapping("/add")
+    @GetMapping
     public String boardForm(@ModelAttribute BoardRequestDto boardRequestDto, Model model){
         model.addAttribute("boardDto", boardRequestDto);
         return "/board/write";
     }
 
     // Board 저장하기
-    @PostMapping("/add")
+    @PostMapping
     public String saveBoard(@Valid @ModelAttribute BoardRequestDto boardRequestDto, BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()){
@@ -87,8 +87,8 @@ public class BoardController {
     }
 
     // Board Update
-    @PostMapping("/edit/{boardId}")
-    public String editBoard(@PathVariable Long boardId, @Valid @ModelAttribute BoardRequestDto boardRequestDto, BindingResult bindingResult){
+    @PatchMapping("/{boardId}")
+    public String editBoard(@PathVariable("boardId") Long boardId, @Valid @ModelAttribute BoardRequestDto boardRequestDto, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
             return "/board/editForm";
@@ -99,7 +99,7 @@ public class BoardController {
     }
 
     // Board 상세 페이지
-    @GetMapping("/board/{boardId}")
+    @GetMapping("{boardId}")
     public String boardPage(@PathVariable Long boardId , Model model){
         BoardResponseDto board = boardService.findById(boardId);
         model.addAttribute("board",board);
@@ -107,7 +107,7 @@ public class BoardController {
     }
 
     // Board delete
-    @DeleteMapping("/board/{boardId}")
+    @DeleteMapping("{boardId}")
     public String deleteBoard(@PathVariable Long boardId){
         boardService.delete(boardId);
         log.info("boardId={}", boardId);

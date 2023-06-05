@@ -24,8 +24,7 @@
     </div>
 
     <div class="col" th:object="${board}">
-        <form action="boards.html" th:action method="post">
-
+        <form action="boards.html" th:action="@{/board/{boardId}(boardId=${board.id})}" th:method="patch">
             <div>
                 <label for="id">글 ID</label>
                 <input type="text" id="id" name="id" class="form-control" value="1"
@@ -52,7 +51,7 @@
                 </div>
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
-                            th:onclick="|location.href='@{/board/board/{boardId}(boardId=${board.id})}'|" type="button">수정 취소</button>
+                            th:onclick="|location.href='@{/board/{boardId}(boardId=${board.id})}'|" type="button">수정 취소</button>
                 </div>
 
             </div>
