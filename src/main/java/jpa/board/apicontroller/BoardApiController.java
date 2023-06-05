@@ -1,12 +1,8 @@
 package jpa.board.apicontroller;
 
-import jpa.board.domain.Board;
 import jpa.board.dto.BoardRequestDto;
 import jpa.board.dto.BoardResponseDto;
-import jpa.board.exception.CustomException;
-import jpa.board.exception.ErrorCode;
 import jpa.board.jsonservice.BoardApiService;
-import jpa.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

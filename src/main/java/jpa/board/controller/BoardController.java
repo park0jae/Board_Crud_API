@@ -1,20 +1,23 @@
 package jpa.board.controller;
 
+import jakarta.validation.Valid;
 import jpa.board.dto.BoardRequestDto;
 import jpa.board.dto.BoardResponseDto;
 import jpa.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -26,17 +29,32 @@ public class BoardController {
 
     // Board add Form 불러오기
     @GetMapping("/add")
-    public String boardForm(){
+    public String boardForm(@ModelAttribute BoardRequestDto boardRequestDto, Model model){
+        model.addAttribute("boardDto", boardRequestDto);
         return "/board/write";
     }
 
     // Board 저장하기
     @PostMapping("/add")
-    public String saveBoard(@ModelAttribute BoardRequestDto boardRequestDto) {
-        boardService.save(boardRequestDto);
-        log.info("title ={}", boardRequestDto.getTitle());
-        log.info("contents= {}", boardRequestDto.getContent());
+    public String saveBoard(@Valid @ModelAttribute BoardRequestDto boardRequestDto, BindingResult bindingResult, Model model) {
 
+        if(bindingResult.hasErrors()){
+            model.addAttribute("boardDto", boardRequestDto);
+
+            /* 유효성 검사를 통과하지 못 한 필드와 메시지 핸들링 */
+            Map<String, String> errorMap = new HashMap<>();
+
+            for(FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+                log.info("filed={}, message={}  ", error.getField(), error.getDefaultMessage());
+
+                model.addAttribute("error",errorMap);
+            }
+
+            return "/board/write";
+        }
+
+        boardService.save(boardRequestDto);
         return "redirect:/board/boards";
     }
 
@@ -70,7 +88,12 @@ public class BoardController {
 
     // Board Update
     @PostMapping("/edit/{boardId}")
-    public String editBoard(@PathVariable Long boardId, @ModelAttribute BoardRequestDto boardRequestDto){
+    public String editBoard(@PathVariable Long boardId, @Valid @ModelAttribute BoardRequestDto boardRequestDto, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            return "/board/editForm";
+        }
+
         boardService.update(boardId,boardRequestDto);
         return "redirect:/board/boards";
     }

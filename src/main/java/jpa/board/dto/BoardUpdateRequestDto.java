@@ -3,7 +3,6 @@ package jpa.board.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.SpringApplication;
 
 @Getter
 @NoArgsConstructor

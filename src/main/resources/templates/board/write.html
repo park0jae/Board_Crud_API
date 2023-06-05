@@ -14,6 +14,8 @@
             color: #dc3545;
         }
     </style>
+
+
 </head>
 <body>
 
@@ -26,17 +28,18 @@
     <form action="boards.html" th:action method="post">
         <div>
             <label for="writer">글 작성자</label>
-            <input type="text" id="writer" name="writer" class="form-control" placeholder="작성자를 입력하세요." >
-
+            <input type="text" id="writer" name="writer" class="form-control" placeholder="작성자를 입력하세요." th:text="${boardDto.writer}" th:class="${error?.containsKey('writer')}? 'form-control field-error' : 'form-control'">
+            <div th:class="field-error" th:if="${error?.containsKey('writer')}" th:text="${error['writer']}">Incorrect writer</div>
         </div>
         <div>
             <label for="title">글 제목</label>
-            <input type="text" id="title"  name="title" class="form-control" placeholder="제목을 입력하세요.">
-
+<!--            <input type="text" id="title"  name="title"  placeholder="제목을 입력하세요." class="form-control">-->
+            <input type="text" th:text="${boardDto.title}" class="form-control" id="title" name="title" placeholder="제목을 입력해 주세요" th:class="${error?.containsKey('title')}? 'form-control field-error' : 'form-control'">
+            <div th:class="field-error" th:if="${error?.containsKey('title')}" th:text="${error['title']}">Incorrect title</div>
         </div>
         <div>
             <label for="content" >글 내용</label>
-            <textarea cols="150" rows="10" id="content" name="content" class="form-control" placeholder="내용을 입력하세요.">
+            <textarea cols="150" rows="10" id="content" name="content" class="form-control" placeholder="내용을 입력하세요." th:text="${boardDto.content}">
             </textarea>
         </div>
 

@@ -1,11 +1,10 @@
 package jpa.board.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import jpa.board.domain.Board;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,8 +12,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BoardRequestDto {
 
+    @NotEmpty(message = "제목을 입력해주세요.")
     private String title;
+
+    @NotEmpty(message = "내용을 입력해주세요.")
+    @Size(min = 2, max = 50)
     private String content;
+
+    @NotEmpty(message = "작성자를 입력해주세요.")
     private String writer;
 
     @Builder
