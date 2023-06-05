@@ -25,7 +25,7 @@
         <h2>글 등록</h2>
     </div>
 
-    <form action="boards.html" th:action method="post">
+    <form action="boards.html" th:action="@{/board}" method="post">
         <div>
             <label for="writer">글 작성자</label>
             <input type="text" id="writer" name="writer" class="form-control" placeholder="작성자를 입력하세요." th:text="${boardDto.writer}" th:class="${error?.containsKey('writer')}? 'form-control field-error' : 'form-control'">
@@ -39,7 +39,7 @@
         </div>
         <div>
             <label for="content" >글 내용</label>
-            <textarea cols="150" rows="10" id="content" name="content" class="form-control" placeholder="내용을 입력하세요." th:text="${boardDto.content}">
+            <textarea cols="150" rows="10" id="content" name="content" class="form-control" \placeholder="내용을 입력하세요." th:text="${boardDto.content}">
             </textarea>
         </div>
 
@@ -50,7 +50,7 @@
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
-                        th:onclick="|location.href='@{/board/boards}'|" type="button">취소</button>
+                        th:onclick="|location.href='@{/board}'|" type="button">취소</button>
             </div>
         </div>
     </form>

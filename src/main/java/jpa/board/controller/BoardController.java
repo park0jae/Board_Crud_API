@@ -28,7 +28,7 @@ public class BoardController {
     private final BoardService boardService;
 
     // Board add Form 불러오기
-    @GetMapping
+    @GetMapping("/add")
     public String boardForm(@ModelAttribute BoardRequestDto boardRequestDto, Model model){
         model.addAttribute("boardDto", boardRequestDto);
         return "/board/write";
@@ -55,11 +55,11 @@ public class BoardController {
         }
 
         boardService.save(boardRequestDto);
-        return "redirect:/board/boards";
+        return "redirect:/board";
     }
 
     // Board List 불러오기
-    @GetMapping("/boards")
+    @GetMapping
     public String boardList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
 
         Page<BoardResponseDto> boardList = boardService.findAll(pageable);
@@ -95,7 +95,7 @@ public class BoardController {
         }
 
         boardService.update(boardId,boardRequestDto);
-        return "redirect:/board/boards";
+        return "redirect:/board";
     }
 
     // Board 상세 페이지
@@ -111,7 +111,7 @@ public class BoardController {
     public String deleteBoard(@PathVariable Long boardId){
         boardService.delete(boardId);
         log.info("boardId={}", boardId);
-        return "redirect:/board/boards";
+        return "redirect:/board";
     }
 }
 

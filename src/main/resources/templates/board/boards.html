@@ -18,7 +18,7 @@
         <div class="col">
             <button class="btn btn-primary float-end"
                     onclick="location.href='write.html'"
-                    th:onclick="|location.href='@{/board}'|"
+                    th:onclick="|location.href='@{/board/add}'|"
                     type="button">글 등록</button>
         </div>
     </div>
@@ -49,38 +49,34 @@
         <nav aria-label="Page Navigation">
             <ul class="pagination">
                 <li class="page-item">
-                    <a class="page-link" th:href="@{/board/boards(page=${boards.first})}" aria-label="First">
+                    <a class="page-link" th:href="@{/board(page=${boards.first})}" aria-label="First">
                         <span aria-hidden="true">처음</span></a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" th:href="${boards.first} ? '#' : @{/board/boards(page=${boards.number - 1})}" aria-label="Previous">
+                    <a class="page-link" th:href="${boards.first} ? '#' : @{/board(page=${boards.number - 1})}" aria-label="Previous">
                         <span aria-hidden="true">이전</span>
                     </a>
                 </li>
                 <th:block th:each="pageButton:${#numbers.sequence(startPage,endPage)}">
                  <li class="page-item">
-                     <a class="page-link" th:if="${pageButton != nowPage}" th:href="@{/board/boards(page=${pageButton - 1})}" th:text="${pageButton}"></a>
+                     <a class="page-link" th:if="${pageButton != nowPage}" th:href="@{/board(page=${pageButton - 1})}" th:text="${pageButton}"></a>
                      <strong th:class="page-link" th:if="${pageButton==nowPage}" th:text="${pageButton}" style="color:red"></strong>
                  </li>
                 </th:block>
                 <li class="page-item">
-                    <a class="page-link" th:href="${boards.last} ? '#' : @{/board/boards(page=${boards.number + 1})}" aria-label="Next">
+                    <a class="page-link" th:href="${boards.last} ? '#' : @{/board(page=${boards.number + 1})}" aria-label="Next">
                         <span aria-hidden="true">다음</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" th:href="@{/board/boards(page=${boards.totalPages - 1})}" aria-label="Last">
+                    <a class="page-link" th:href="@{/board(page=${boards.totalPages - 1})}" aria-label="Last">
                         <span aria-hidden="true">끝</span>
                     </a>
                 </li>
 
             </ul>
         </nav>
-        <!-- 페이징 -->
-<!--        <th:block th:each="page:${#numbers.sequence(startPage,endPage)}">-->
-<!--            <a th:if="${page != nowPage}" th:href="@{/board/boards(page=${page - 1})}" th:text="${page}"></a>-->
-<!--            <strong th:if="${page==nowPage}" th:text="${page}" style="color:red"></strong>-->
-<!--        </th:block>-->
+
     </div>
 
 </div> <!-- /container -->
