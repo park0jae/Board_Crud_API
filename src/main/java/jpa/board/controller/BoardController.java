@@ -60,20 +60,41 @@ public class BoardController {
 
     // Board List 불러오기
     @GetMapping
-    public String boardList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    public String boardList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable
+            , String searchKeyword, String searchValue){
 
-        Page<BoardResponseDto> boardList = boardService.findAll(pageable);
+        Page<BoardResponseDto> boardList = null;
+
+        log.info("searchKeyword={}", searchKeyword);
+        log.info("searchValue={}", searchValue);
+
+
+        if(searchKeyword!= null ) {
+            if (searchKeyword.equals("title")) {
+                boardList = boardService.searchTitle(searchValue, pageable);
+            } else {
+                boardList = boardService.searchWriter(searchValue, pageable);
+            }
+        }else {
+            boardList = boardService.findAll(pageable);
+        }
 
         // 1을 더해주는 이유는 pageable은 0부터라 1을 처리하려면 1을 더해서 시작해주어야 함
         int nowPage = boardList.getPageable().getPageNumber() + 1;
         // -1 값이 들어가는 것을 막기 위해 max값으로 두 개의 값을 넣고 더 큰 값을 넣어주게 된다.
         int startPage = Math.max(nowPage - 4, 1);
-        int endPage = boardList.getTotalPages();
+        int endPage =  boardList.getTotalPages();
 
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        model.addAttribute("boards", boardService.findAll(pageable));
+        model.addAttribute("searchK" , searchKeyword);
+        model.addAttribute("searchV", searchValue);
+
+
+
+        model.addAttribute("boards", boardList);
+
         return "/board/boards";
     }
 
@@ -113,5 +134,7 @@ public class BoardController {
         log.info("boardId={}", boardId);
         return "redirect:/board";
     }
+
+
 }
 

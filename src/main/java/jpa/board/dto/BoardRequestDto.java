@@ -22,6 +22,10 @@ public class BoardRequestDto {
     @NotEmpty(message = "작성자를 입력해주세요.")
     private String writer;
 
+    // 검색 필터
+    private String type;
+    private String keyword;
+
     @Builder
     public BoardRequestDto(String title, String content, String writer){
         this.title = title;

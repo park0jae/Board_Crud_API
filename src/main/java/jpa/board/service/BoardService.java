@@ -27,7 +27,6 @@ public class BoardService {
         Board board = boardRepository.save(boardRequestDto.toEntity());
         return board.getId();
     }
-
     /**
      * 게시글 리스트 조회
      */
@@ -48,9 +47,25 @@ public class BoardService {
         board.update(boardRequestDto.getTitle(), boardRequestDto.getContent());
         return board.getId();
     }
+    /**
+     * 게시글 삭제
+     */
     @Transactional
     public void delete(Long id){
         Board board = boardRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         boardRepository.deleteById(board.getId());
+    }
+    /**
+     * 게시글 검색
+     */
+    @Transactional
+    public Page<BoardResponseDto> searchTitle(String keyword, Pageable pageable){
+        Page<Board> page = boardRepository.findByTitleContaining(keyword,pageable);
+        return page.map(b -> BoardResponseDto.toDto(b));
+    }
+    @Transactional
+    public Page<BoardResponseDto> searchWriter(String keyword, Pageable pageable){
+        Page<Board> page = boardRepository.findByWriterContaining(keyword,pageable);
+        return page.map(b -> BoardResponseDto.toDto(b));
     }
 }
