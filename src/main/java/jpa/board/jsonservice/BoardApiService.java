@@ -52,4 +52,15 @@ public class BoardApiService {
             Board board = boardRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
             boardRepository.deleteById(board.getId());
         }
+
+        @Transactional
+        public Page<BoardResponseDto> searchTitle(String keyword, Pageable pageable){
+            Page<Board> page = boardRepository.findByTitleContaining(keyword,pageable);
+            return page.map(b -> BoardResponseDto.toDto(b));
+        }
+        @Transactional
+        public Page<BoardResponseDto> searchWriter(String keyword, Pageable pageable){
+            Page<Board> page = boardRepository.findByWriterContaining(keyword,pageable);
+            return page.map(b -> BoardResponseDto.toDto(b));
+        }
 }

@@ -31,6 +31,7 @@
             </form>
         </div>
     </div>
+
     <div th:if="${searchK == 'title'}">
         제목 : "<span th:text="${searchV}"></span>" 에 대한 검색결과
     </div>
@@ -59,15 +60,18 @@
             </tbody>
         </table>
 
+        <strong th:if="${searchK.length() == 0 && searchV.length() != 0}" th:text="|검색 조건을 선택해주세요.|" style="color:red">
+        </strong>
+        <span th:if="${boards.isEmpty()}" th:text="| 일치하는 검색 결과가 없습니다.|"></span>
 
         <nav aria-label="Page Navigation">
             <ul class="pagination">
                 <li class="page-item">
-                    <a class="page-link" th:href="@{/board(page=${boards.first})}" aria-label="First">
+                    <a class="page-link" th:if="${startPage != endPage}" th:href="@{/board(page=${boards.first})}" aria-label="First">
                         <span aria-hidden="true">처음</span></a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" th:href="${boards.first} ? '#' : @{/board(page=${boards.number - 1})}" aria-label="Previous">
+                    <a class="page-link" th:if="${startPage != endPage}" th:href="${boards.first} ? '#' : @{/board(page=${boards.number - 1})}" aria-label="Previous">
                         <span aria-hidden="true">이전</span>
                     </a>
                 </li>
@@ -78,12 +82,12 @@
                  </li>
                 </th:block>
                 <li class="page-item">
-                    <a class="page-link" th:href="${boards.last} ? '#' : @{/board(page=${boards.number + 1})}" aria-label="Next">
+                    <a class="page-link" th:if="${startPage != endPage}" th:href="${boards.last} ? '#' : @{/board(page=${boards.number + 1})}" aria-label="Next">
                         <span aria-hidden="true">다음</span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" th:href="@{/board(page=${boards.totalPages - 1})}" aria-label="Last">
+                    <a class="page-link" th:if="${startPage != endPage}" th:href="@{/board(page=${boards.totalPages - 1})}" aria-label="Last">
                         <span aria-hidden="true">끝</span>
                     </a>
                 </li>

@@ -6,6 +6,7 @@ import jpa.board.jsonservice.BoardApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -28,13 +29,23 @@ public class BoardApiController {
         boardApiService.save(dto);
         return "저장 완료";
     }
-
     /**
      * 게시글 리스트 조회
      */
     @GetMapping
-    public Page<BoardResponseDto> findAll(@PageableDefault(sort = "id",direction = Sort.Direction.ASC)Pageable pageable){
-        return boardApiService.findAll(pageable);
+    public Page<BoardResponseDto> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size
+        ,String searchKeyword, String searchValue
+    ){
+        PageRequest pageable = PageRequest.of(page, size);
+        if(searchKeyword!= null ) {
+            if (searchKeyword.equals("title")) {
+                return boardApiService.searchTitle(searchValue, pageable);
+            } else {
+                return boardApiService.searchWriter(searchValue, pageable);
+            }
+        }else {
+            return boardApiService.findAll(pageable);
+        }
     }
     /**
      * 단건 조회

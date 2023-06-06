@@ -7,6 +7,7 @@ import jpa.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -60,14 +61,11 @@ public class BoardController {
 
     // Board List 불러오기
     @GetMapping
-    public String boardList(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable
-            , String searchKeyword, String searchValue){
+    public String boardList(Model model,
+                            @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size, String searchKeyword, String searchValue){
 
+        Pageable pageable = PageRequest.of(page, size);
         Page<BoardResponseDto> boardList = null;
-
-        log.info("searchKeyword={}", searchKeyword);
-        log.info("searchValue={}", searchValue);
-
 
         if(searchKeyword!= null ) {
             if (searchKeyword.equals("title")) {
@@ -79,19 +77,26 @@ public class BoardController {
             boardList = boardService.findAll(pageable);
         }
 
-        // 1을 더해주는 이유는 pageable은 0부터라 1을 처리하려면 1을 더해서 시작해주어야 함
-        int nowPage = boardList.getPageable().getPageNumber() + 1;
-        // -1 값이 들어가는 것을 막기 위해 max값으로 두 개의 값을 넣고 더 큰 값을 넣어주게 된다.
-        int startPage = Math.max(nowPage - 4, 1);
-        int endPage =  boardList.getTotalPages();
+        int nowPage;
+        int startPage;
+        int endPage;
 
+        if(!boardList.isEmpty()) {
+            // 1을 더해주는 이유는 pageable은 0부터라 1을 처리하려면 1을 더해서 시작해주어야 함
+            nowPage = boardList.getPageable().getPageNumber() + 1;
+            // -1 값이 들어가는 것을 막기 위해 max값으로 두 개의 값을 넣고 더 큰 값을 넣어주게 된다.
+            startPage = Math.max(nowPage - 4, 1);
+            endPage = boardList.getTotalPages();
+        }else {
+            nowPage = 1;
+            startPage = 1;
+            endPage =1;
+        }
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("searchK" , searchKeyword);
         model.addAttribute("searchV", searchValue);
-
-
 
         model.addAttribute("boards", boardList);
 
